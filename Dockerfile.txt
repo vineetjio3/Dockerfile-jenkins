@@ -1,0 +1,21 @@
+#Importing base image Ubuntu
+FROM ubuntu:latest
+#Updating and Upgrading Ubuntu
+RUN apt-get -y update \
+&& apt-get -y upgrade
+#Install Java version 11 as prerequisite
+RUN apt-get -y install openjdk-17-jdk && apt-get install -y wget && apt-get -y install curl
+#Jenkins installation
+#Download & add repository key
+RUN curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null &&  echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+#Updating packages
+RUN apt-get update
+#Installing Jenkins
+RUN apt-get -y install jenkins
+#Start jenkins
+RUN service jenkins start
+#Expose port 8080
+EXPOSE 8080
